@@ -53,7 +53,7 @@ int sp = -1;
 // Dah stack!
 int stack[256];
 
-// get current instruction
+// fetch next instruction to execute
 int fetch() {
     return instruction[ip];
 }
