@@ -4,12 +4,12 @@
 // We will have A, B, C, D, E, F and other registers for the virtual machine
 
 // Instruction set for the virtual machine:
-// PSH 5       ; pushes 5 to the stack
-// PSH 10      ; pushes 10 to the stack
+// PUSH 5       ; pushes 5 to the stack
+// PUSH 10      ; pushes 10 to the stack
 // ADD         ; pops two values on top of the stack, adds them pushes to stack
 // POP         ; pops the value on the stack, will also print it for debugging
 // SET A 0     ; sets register A to 0
-// HLT         ; stop the program
+// HALT         ; stop the virtual machine
 
 
 #include <stdio.h>
@@ -19,13 +19,12 @@
 // #define sp (registers[SP])
 // #define ip (registers[IP])
 
-// TODO: rename `PSH` to `PUSH` and ``HLT` to `HALT`
 typedef enum {
-    PSH,
+    PUSH,
     ADD,
     POP,
     SET,
-    HLT
+    HALT
 } InstructionSet;
 
 // Registers
@@ -36,12 +35,12 @@ typedef enum {
 
 // test program for the virtual machine
 // all it does is to add 5 and 6, print out the result and then stop
-const int program[] = {
-    PSH, 5,
-    PSH, 6,
+const int instruction[] = {
+    PUSH, 5,
+    PUSH, 6,
     ADD,
     POP,
-    HLT
+    HALT
 };
 
 // Instruction pointer
@@ -54,18 +53,17 @@ int sp = -1;
 // Dah stack!
 int stack[256];
 
-// get an instruction
-int fetch() {
-    return program[ip];
+// get current instruction
+int getInstruction() {
+    return instruction[ip];
 }
 
 bool running = true;
 
-void eval(int instr) {
+void execute(int instr) {
     switch (instr) {
-        case PSH: {
-            sp++;
-            stack[sp] = program[++ip];
+        case PUSH: {
+            stack[++sp] = instruction[++ip];
             break;
         }
         case POP: {
@@ -73,7 +71,7 @@ void eval(int instr) {
             // then decrement the stack pointer
             // and finally, print out the result
             int val_popped = stack[sp--];
-            printf("popped %d\n", val_popped);
+            printf("just popped %d\n", val_popped);
             break;
         }
         case ADD: {
@@ -91,7 +89,7 @@ void eval(int instr) {
             // all done!
             break;
         }
-        case HLT: {
+        case HALT: {
             running = false;
             break;
         }
@@ -100,7 +98,7 @@ void eval(int instr) {
 
 int main() {
     while (running) {
-        eval(fetch());
+        execute(getInstruction());
         ip++; // increment the ip every iteration
     }
 }
