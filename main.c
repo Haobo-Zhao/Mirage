@@ -54,7 +54,7 @@ int sp = -1;
 int stack[256];
 
 // get current instruction
-int getInstruction() {
+int get_instruction() {
     return instruction[ip];
 }
 
@@ -98,7 +98,7 @@ void execute(int instr) {
 
 int main() {
     while (running) {
-        execute(getInstruction());
+        execute(get_instruction());
         ip++; // increment the ip every iteration
     }
 }
