@@ -68,8 +68,8 @@ void execute(int instr) {
         }
         case POP: {
             // store the value at the top of the stack in `val_popped`
-            // then decrement the stack pointer
-            // and finally, print out the result
+            // then decrease the stack pointer
+            // and finally, print out the result (only for debugging purpose)
             int val_popped = stack[sp--];
             printf("just popped %d\n", val_popped);
             break;
