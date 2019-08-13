@@ -10,3 +10,85 @@
 // POP         ; pops the value on the stack, will also print it for debugging
 // SET A 0     ; sets register A to 0
 // HLT         ; stop the program
+
+#include <stdbool.h>
+
+// TODO: rename `PSH` to `PUSH` and ``HLT` to `HALT`
+typedef enum {
+    PSH,
+    ADD,
+    POP,
+    SET,
+    HLT
+} InstructionSet;
+
+// test program for the virtual machine
+// all it does is to add 5 and 6, print out the result and then stop
+const int program[] = {
+    PSH, 5,
+    PSH, 6,
+    ADD,
+    POP,
+    HLT
+};
+
+// Instruction pointer
+int ip = 0;
+
+// Stack pointer
+int sp = -1;
+
+// Dah stack!
+int stack[256];
+
+// get an instruction
+int fetch() {
+    return program[ip];
+}
+
+bool running = true;
+
+void eval(int instr) {
+    switch (instr) {
+        case PSH: {
+            sp++;
+            stack[sp] = program[++ip];
+            break;
+        }
+        case POP: {
+            // store the value at the top of the stack in `val_popped`
+            // and then decrement the stack pointer
+            int val_popped = stack[sp--];
+
+            // print it
+            printf("popped %d\n", val_popped);
+            break;
+        }
+        case ADD: {
+            // first we pop the stack and store it in 'a'
+            int a = stack[sp--];
+
+            // and then we pop the top of the stack and store it in 'b'
+            int b = stack[sp--];
+
+            // then we add the result and push it back to the stack
+            int result = b + a;
+            // increment stack pointer before we push
+            stack[++sp] = result;
+
+            // all done!
+            break;
+        }
+        case HLT: {
+            running = false;
+            break;
+        }
+    }
+}
+
+int main() {
+    while (running) {
+        eval(fetch());
+        ip++; // increment the ip every iteration
+    }
+}
