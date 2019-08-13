@@ -1,7 +1,7 @@
 // The virtual machine is based on stack
 // I think "stack machine" might not be a bad idea :)
 
-// We will have A, B, C, D, E and F, 6 registers in total for the virtual machine
+// We will have A, B, C, D, E, F and other registers for the virtual machine
 
 // Instruction set for the virtual machine:
 // PSH 5       ; pushes 5 to the stack
@@ -11,7 +11,13 @@
 // SET A 0     ; sets register A to 0
 // HLT         ; stop the program
 
+
+#include <stdio.h>
 #include <stdbool.h>
+
+// macros for sp (stack pointer) and ip(instruction pointer)
+// #define sp (registers[SP])
+// #define ip (registers[IP])
 
 // TODO: rename `PSH` to `PUSH` and ``HLT` to `HALT`
 typedef enum {
@@ -21,6 +27,12 @@ typedef enum {
     SET,
     HLT
 } InstructionSet;
+
+// Registers
+// typedef enum {
+//     A, B, C, D, E, F, IP, SP,
+//     NUM_OF_REGISTERS
+// } Registers;
 
 // test program for the virtual machine
 // all it does is to add 5 and 6, print out the result and then stop
@@ -35,7 +47,8 @@ const int program[] = {
 // Instruction pointer
 int ip = 0;
 
-// Stack pointer
+// Stack pointer,
+// Initialized to -1 here, since sp is increased before the value is pushed onto the stack
 int sp = -1;
 
 // Dah stack!
@@ -57,10 +70,9 @@ void eval(int instr) {
         }
         case POP: {
             // store the value at the top of the stack in `val_popped`
-            // and then decrement the stack pointer
+            // then decrement the stack pointer
+            // and finally, print out the result
             int val_popped = stack[sp--];
-
-            // print it
             printf("popped %d\n", val_popped);
             break;
         }
