@@ -15,6 +15,9 @@
 #include <stdio.h>
 #include <stdbool.h>
 
+// #define sp (registers[SP])
+// #define ip (registers[IP])
+
 // macros for sp (stack pointer) and ip(instruction pointer)
 // #define sp (registers[SP])
 // #define ip (registers[IP])
@@ -32,6 +35,8 @@ typedef enum {
 //     A, B, C, D, E, F, IP, SP,
 //     NUM_OF_REGISTERS
 // } Registers;
+// int registers[NUM_OF_REGISTERS];
+
 
 // test program for the virtual machine
 // all it does is to add 5 and 6, print out the result and then stop
